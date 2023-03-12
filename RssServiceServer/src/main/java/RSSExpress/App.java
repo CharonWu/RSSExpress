@@ -16,19 +16,14 @@ public class App
         RSSAdapter rssAdapter = new RSSAdapter();
         Gson gson = new Gson();
 
-        get("/hello", (req, res) -> {
-            return "Hello World, RSSExpress";
-        });
-
         //return home page of RSSReader
         get("/", (req, res)->{
             return "RSS home";
         });
 
         //get Rss subscribe list
-        get("/rsslist", (req, res)->{
-            rssAdapter.getRSSList(0);
-            return "get rsslist";
+        get("/rsslist/:owner_id", (req, res)->{
+            return gson.toJson(rssAdapter.getRSSList(Integer.parseInt(req.params(":owner_id"))));
         });
 
         //empty Rss subscribe list
@@ -42,8 +37,8 @@ public class App
         });
 
         //unsubscribe new Rss content
-        delete("/unsubscribe", (req, res)->{
-            return "unsub";
+        patch("/unsubscribe", (req, res)->{
+            return gson.toJson(rssAdapter.unsubscribe(Integer.parseInt(req.queryParams("owner_id")), req.queryParams("link")));
         });
     }
 }

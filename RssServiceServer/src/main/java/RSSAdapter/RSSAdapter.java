@@ -22,10 +22,7 @@ public class RSSAdapter {
     }
 
     public RSSList getRSSList(int owner_id){
-
-        DBManager.getRSSList(owner_id);
-
-        return null;
+        return DBManager.getRSSList(owner_id);
     }
 
     public void emptyRSSList(int owner_id){
@@ -58,7 +55,10 @@ public class RSSAdapter {
             in.close();
             con.disconnect();
 
-            return new RSSContent(content.toString(), link);
+            RSSContent Rss_content = new RSSContent(content.toString(), link);
+            DBManager.addRSSContent(owner_id, Rss_content);
+
+            return Rss_content;
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -67,7 +67,7 @@ public class RSSAdapter {
         return null;
     }
 
-    public void unsubscribe(int owner_id, int index){
-
+    public boolean unsubscribe(int owner_id, String link){
+        return DBManager.removeRSSContent(owner_id, link);
     }
 }
