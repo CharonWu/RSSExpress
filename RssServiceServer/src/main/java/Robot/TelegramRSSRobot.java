@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -79,11 +80,11 @@ public class TelegramRSSRobot extends TelegramLongPollingBot implements RSSRobot
     }
 
     private void checkRSSUpdate() {
-        for (Pair<String, RSSList> pair : adapter.getRSSUpdate("telegram_id")) {
-
-            for (RSSContent content : pair.getSecond().getRSSList()) {
+        for (Pair<String, LinkedList<RSSItem>> pair : adapter.getRSSUpdate("telegram_id")) {
+            System.out.println(pair.getFirst());
+            for (RSSItem item : pair.getSecond()) {
                 try {
-                    sendLatest(Long.parseLong(pair.getFirst()), content);
+                    sendLatest(Long.parseLong(pair.getFirst()), item);
                 } catch (TelegramApiException e) {
                     throw new RuntimeException(e);
                 }
@@ -171,13 +172,13 @@ public class TelegramRSSRobot extends TelegramLongPollingBot implements RSSRobot
         int owner_id = DBManager.getAccountRelation("telegram_id", String.valueOf(user_id));
 
         try {
-            RSSContent RSS_content = adapter.subscribe(owner_id, command_string[1]);
+            RSSItem RSS_item = adapter.subscribe(owner_id, command_string[1]);
             SendMessage send_message = new SendMessage();
             send_message.setChatId(user_id);
 
-            if (RSS_content != null) {
+            if (RSS_item != null) {
                 send_message.setText("Subscribe success.");
-                sendLatest(user_id, RSS_content);
+                sendLatest(user_id, RSS_item);
             } else {
                 send_message.setText("Subscribe failed.");
             }
@@ -253,11 +254,11 @@ public class TelegramRSSRobot extends TelegramLongPollingBot implements RSSRobot
         }
     }
 
-    private void sendLatest(long chatId, RSSContent RSS_content) throws TelegramApiException {
+    private void sendLatest(long chatId, RSSItem item) throws TelegramApiException {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setParseMode("html");
-        message.setText(RSS_content.getLatest_link());
+        message.setText(item.getLink());
         execute(message);
     }
 

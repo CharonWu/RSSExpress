@@ -27,9 +27,9 @@ public class App
         });
 
         //empty Rss subscribe list
-        delete("/rsslist", (req, res)->{
-            return "delete rsslist";
-        });
+//        delete("/rsslist", (req, res)->{
+//            return "delete rsslist";
+//        });
 
         //subscribe new Rss content
         post("/subscribe", (req, res)->{

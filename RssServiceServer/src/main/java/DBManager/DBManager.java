@@ -67,13 +67,12 @@ public class DBManager {
         return new RSSList(owner_id, RSS_list_doc);
     }
 
-    public static void updateRSSLists(List<Pair<String, RSSList>> RSS_lists) {
+    public static void updateRSSLists(List<RSSList> RSS_lists) {
 
         MongoDatabase RSSExpressDB = mongoClient.getDatabase("RSSExpress");
         MongoCollection<Document> RSS_list_collection = RSSExpressDB.getCollection("RSSLists");
 
-        for (Pair<String, RSSList> pair : RSS_lists) {
-            RSSList RSS_list = pair.getSecond();
+        for (RSSList RSS_list : RSS_lists) {
             int owner_id = RSS_list.getOwner_id();
             List<RSSContent> contents = RSS_list.getRSSList();
 

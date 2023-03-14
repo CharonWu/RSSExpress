@@ -20,8 +20,8 @@ public class RSSContent {
 
     private String latest_link;
 
-    public RSSContent(String content, String link){
-        Document document = Jsoup.parse(content, Parser.xmlParser());
+    public RSSContent(Document document, String link){
+//        Document document = Jsoup.parse(content, Parser.xmlParser());
 
         title = document.getElementsByTag("title").first().text();
         this.link = link;
