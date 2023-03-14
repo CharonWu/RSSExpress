@@ -3,3 +3,6 @@
 
 #Telegram
 /RssServiceServer/src/main/resources/telegram.properties
+
+#idea
+.idea
