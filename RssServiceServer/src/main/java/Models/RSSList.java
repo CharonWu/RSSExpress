@@ -1,6 +1,5 @@
 package Models;
 
-import DBManager.DBManager;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -15,6 +14,11 @@ public class RSSList {
     private LinkedList<RSSContent> RSS_list;
 
 
+    public RSSList(int owner_id, LinkedList<RSSContent> RSS_list){
+        this.owner_id=owner_id;
+        this.RSS_list = RSS_list;
+    }
+
     public RSSList(int owner_id, Document document){
         this.owner_id=owner_id;
         RSS_list = new LinkedList<>();
@@ -23,36 +27,20 @@ public class RSSList {
         }
     }
 
-    public void createRSSList(Document document){
-
-
-        DBManager.createRSSList(this);
-    }
-
-    public boolean addRSSContent(int owner_id, RSSContent content){
-        for(RSSContent c:RSS_list){
-            if(Objects.equals(c.getLink(), content.getLink())){
-                return false;
-            }
-        }
-        RSS_list.add(content);
-        return true;
-    }
-
-    public boolean removeRSSContent(int index){
-        if(index<0||index>=RSS_list.size())
-            return false;
-        RSS_list.remove(index);
-        return true;
-    }
-
-
     public int getOwner_id() {
         return owner_id;
     }
 
     public void setOwner_id(int owner_id) {
         this.owner_id = owner_id;
+    }
+
+    public LinkedList<RSSContent> getRSSList() {
+        return RSS_list;
+    }
+
+    public void setRSSList(LinkedList<RSSContent> RSS_list) {
+        this.RSS_list = RSS_list;
     }
 
     public static Document DBInstance(int owner_id, RSSContent content){
@@ -66,5 +54,28 @@ public class RSSList {
                         .append("item_limit", content.getItem_limit())));
 
         return RSS_list;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+
+        int index = 1;
+        for(RSSContent content: RSS_list){
+            sb.append(index++);
+            sb.append(". ");
+            sb.append(content.getTitle());
+            sb.append('\n');
+            sb.append(content.getLink());
+            sb.append('\n');
+            sb.append("Description: \n");
+            sb.append(content.getDescription());
+            sb.append('\n');
+            sb.append("Last update time: ");
+            sb.append(new Date(content.getLatest_pub_date()));
+            sb.append('\n');
+        }
+
+        return sb.toString();
     }
 }

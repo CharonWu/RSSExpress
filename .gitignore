@@ -1,0 +1,5 @@
+#MongoDB
+/RssServiceServer/src/main/resources/mongodb.properties
+
+#Telegram
+/RssServiceServer/src/main/resources/telegram.properties

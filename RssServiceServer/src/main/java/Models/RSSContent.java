@@ -3,6 +3,7 @@ package Models;
 import Tools.TimeUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
 import java.text.ParseException;
@@ -17,14 +18,17 @@ public class RSSContent {
 
     private long latest_pub_date;
 
+    private String latest_link;
+
     public RSSContent(String content, String link){
-        Document document = Jsoup.parse(content);
+        Document document = Jsoup.parse(content, Parser.xmlParser());
 
         title = document.getElementsByTag("title").first().text();
         this.link = link;
         description = document.getElementsByTag("description").first().text();
 
         Elements itemList = document.getElementsByTag("item");
+        latest_link = itemList.first().getElementsByTag("link").first().text();
         try {
             latest_pub_date = TimeUtil.format(itemList.first().getElementsByTag("pubDate").first().text()).getTime();
         } catch (ParseException e) {
@@ -89,5 +93,9 @@ public class RSSContent {
 
     public void setLatest_pub_date(long latest_pub_date) {
         this.latest_pub_date = latest_pub_date;
+    }
+
+    public String getLatest_link() {
+        return latest_link;
     }
 }
