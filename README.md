@@ -7,7 +7,7 @@ RSSExpress is a light-weight tool to fetch RSS feeds, you can get RSS feeds thro
 ## Setup
 ### Mongodb
 - RSSExpress uses MongoDB to store data.
-The mongodb.properties file looks like:
+The mongodb.properties file looks like:<br />
 connection="your mongodb connection"
 
 ### RSSHub
